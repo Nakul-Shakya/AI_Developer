@@ -29,7 +29,7 @@ router.get(
   userController.porfileController
 );
 
-router.post(
+router.get(
   "/logout",
   authMiddleware.authUser,
   userController.logoutController
