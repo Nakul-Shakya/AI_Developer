@@ -1,41 +1,77 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { React, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "../config/axios";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  function submitHandler(e) {
+    e.preventDefault();
+
+    axios
+      .post("/login", {
+        email,
+        password,
+      })
+      .then((res) => {
+        console.log(res.data);
+        navigate("/");
+      })
+      .catch((err) => console.log(err.response.data));
+  }
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
-      <div className="w-full max-w-md px-8 py-6  bg-gray-800 rounded-2xl shadow-lg">
-        <h2 className="text-2xl font-semibold text-center">Login</h2>
-        <form className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium">Email</label>
+    <div className="max-w-full h-screen flex justify-center items-center container px-4 mx-auto bg-gray-100 dark:bg-gray-800">
+      <div className="max-w-lg mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+        <div className="text-center mb-6">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white">
+            Login
+          </h2>
+        </div>
+        <form onsubmit={submitHandler}>
+          <div className="mb-6">
+            <label
+              className="block mb-2 font-extrabold text-gray-900 dark:text-gray-300"
+              htmlFor="email"
+            >
+              Email
+            </label>
             <input
+              onchange={(e) => setEmail(e.target.value)}
+              className="inline-block w-full p-4 leading-6 text-lg font-extrabold placeholder-gray-700 dark:placeholder-gray-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow border-2 border-indigo-900 rounded"
               type="email"
-              className="px-4 py-2 mt-1 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="Enter your email"
+              id="email"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium">Password</label>
+          <div className="mb-6">
+            <label
+              className="block mb-2 font-extrabold text-gray-900 dark:text-gray-300"
+              htmlFor="password"
+            >
+              Password
+            </label>
             <input
+              onchange={(e) => setPassword(e.target.value)}
+              className="inline-block w-full p-4 leading-6 text-lg font-extrabold placeholder-gray-700 dark:placeholder-gray-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow border-2 border-indigo-900 rounded"
               type="password"
-              className=" px-4 py-2 mt-1 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="Enter your password"
+              id="password"
             />
           </div>
-          <button
-            type="submit"
-            className="w-24 px-24 py-24 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-          >
+
+          <br />
+
+          <button className="inline-block w-full py-4 px-6 mb-6 text-center text-lg leading-6 text-white font-extrabold bg-indigo-800 hover:bg-indigo-900 border-3 border-indigo-900 shadow rounded transition duration-200">
             Login
           </button>
+          <p className="text-center font-extrabold text-gray-900 dark:text-gray-300">
+            Don’t have an account?{" "}
+            <Link to={"/register"} className="text-red-600 hover:underline">
+              create one
+            </Link>
+          </p>
         </form>
-        <p className="text-sm text-center text-gray-400">
-          Don't have an account?
-          <Link to="/register" className="text-blue-400 hover:underline ml-1">
-            Create one
-          </Link>
-        </p>
       </div>
     </div>
   );
