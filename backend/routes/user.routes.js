@@ -29,11 +29,7 @@ router.get(
   userController.porfileController
 );
 
-router.get(
-  "/logout",
-  authMiddleware.authUser,
-  userController.logoutController
-);
+router.get("/logout", authMiddleware.authUser, userController.logoutController);
 
 export default router;
 

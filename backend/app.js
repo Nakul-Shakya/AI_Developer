@@ -10,6 +10,7 @@ connect();
 // Create express app
 const app = express();
 
+
 // Middlewares
 app.use(cors());
 app.use(morgan("dev"));
