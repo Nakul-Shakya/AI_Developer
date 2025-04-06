@@ -32,10 +32,8 @@ function Register() {
               Register
             </h2>
           </div>
-          
-          <form onSubmit={submitHandler} >
 
-
+          <form onSubmit={submitHandler}>
             <div className="mb-6">
               <label
                 className="block mb-2 font-extrabold text-gray-900 dark:text-gray-300"
@@ -48,7 +46,7 @@ function Register() {
                 className="inline-block w-full p-4 leading-6 text-lg font-extrabold placeholder-gray-700 dark:placeholder-gray-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow border-2 border-indigo-900 rounded"
                 type="email"
                 id="email"
-                />
+              />
             </div>
 
             <div className="mb-6">

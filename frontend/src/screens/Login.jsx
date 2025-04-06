@@ -1,10 +1,14 @@
-import { React, useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../config/axios";
+import { UserContext } from "../context/user.context";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { setUser } = useContext(UserContext);
+
   const navigate = useNavigate();
 
   function submitHandler(e) {
@@ -17,61 +21,59 @@ const Login = () => {
       })
       .then((res) => {
         console.log(res.data);
+
+        localStorage.setItem("token", res.data.token);
+        setUser(res.data.user);
+
         navigate("/");
       })
-      .catch((err) => console.log(err.response.data));
+      .catch((err) => {
+        console.log(err.response.data);
+      });
   }
 
   return (
-    <div className="max-w-full h-screen flex justify-center items-center container px-4 mx-auto bg-gray-100 dark:bg-gray-800">
-      <div className="max-w-lg mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-        <div className="text-center mb-6">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white">
-            Login
-          </h2>
-        </div>
-        <form onsubmit={submitHandler}>
-          <div className="mb-6">
-            <label
-              className="block mb-2 font-extrabold text-gray-900 dark:text-gray-300"
-              htmlFor="email"
-            >
+    <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold text-white mb-6">Login</h2>
+        <form onSubmit={submitHandler}>
+          <div className="mb-4">
+            <label className="block text-gray-400 mb-2" htmlFor="email">
               Email
             </label>
             <input
-              onchange={(e) => setEmail(e.target.value)}
-              className="inline-block w-full p-4 leading-6 text-lg font-extrabold placeholder-gray-700 dark:placeholder-gray-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow border-2 border-indigo-900 rounded"
+              onChange={(e) => setEmail(e.target.value)}
               type="email"
               id="email"
+              className="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your email"
             />
           </div>
           <div className="mb-6">
-            <label
-              className="block mb-2 font-extrabold text-gray-900 dark:text-gray-300"
-              htmlFor="password"
-            >
+            <label className="block text-gray-400 mb-2" htmlFor="password">
               Password
             </label>
             <input
-              onchange={(e) => setPassword(e.target.value)}
-              className="inline-block w-full p-4 leading-6 text-lg font-extrabold placeholder-gray-700 dark:placeholder-gray-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow border-2 border-indigo-900 rounded"
+              onChange={(e) => setPassword(e.target.value)}
               type="password"
               id="password"
+              className="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your password"
             />
           </div>
-
-          <br />
-
-          <button className="inline-block w-full py-4 px-6 mb-6 text-center text-lg leading-6 text-white font-extrabold bg-indigo-800 hover:bg-indigo-900 border-3 border-indigo-900 shadow rounded transition duration-200">
+          <button
+            type="submit"
+            className="w-full p-3 rounded bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
             Login
           </button>
-          <p className="text-center font-extrabold text-gray-900 dark:text-gray-300">
-            Don’t have an account?{" "}
-            <Link to={"/register"} className="text-red-600 hover:underline">
-              create one
-            </Link>
-          </p>
         </form>
+        <p className="text-gray-400 mt-4">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-blue-500 hover:underline">
+            Create one
+          </Link>
+        </p>
       </div>
     </div>
   );
