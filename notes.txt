@@ -1,0 +1,47 @@
+Database Soen => https://github.com/Ankur77720/soen/tree/main
+https://www.youtube.com/watch?v=v9MtwYmSXuw&list=PLbtI3_MArDOmebicV5NFkhBMRJH8vhBEN&index=8
+sudo mongod --config /etc/mongod.conf
+
+
+start 
+      frontend 
+        => npm run dev
+      
+      backend 
+        => npm start
+
+user
+          => opsd6722@gmail.com
+          => abcd1
+
+
+PS D:\Nakul\AI_Developer> npm create vite@latest
+Need to install the following packages:
+create-vite@6.3.1
+Ok to proceed? (y) y
+
+
+> npx
+> cva
+
+│
+◇  Project name:
+│  frontend
+│
+◇  Select a framework:
+│  React
+│
+◇  Select a variant:
+│  JavaScript
+│
+◇  Scaffolding project in D:\Nakul\AI_Developer\frontend...
+│
+└  Done. Now run:
+
+  cd frontend    
+  npm install    
+  npm run dev    
+
+
+
+Last ==>  1:49:00
