@@ -4,7 +4,7 @@ import axios from "../config/axios";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectName, setProjectName] = useState(null);
   const [project, setProject] = useState([]);
@@ -29,8 +29,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    axios
-      .get("/projects/all")
+    axios.get("/projects/all")
       .then((res) => {
         setProject(res.data.projects);
       })
