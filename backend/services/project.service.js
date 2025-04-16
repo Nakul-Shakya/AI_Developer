@@ -1,4 +1,5 @@
 import projectModel from "../models/project.model.js";
+import mongoose from "mongoose";
 
 export const createProject = async ({ name, userId }) => {
   if (!name) {
@@ -7,6 +8,7 @@ export const createProject = async ({ name, userId }) => {
   if (!userId) {
     throw new Error("UserId is required");
   }
+
   let project;
   try {
     project = await projectModel.create({
@@ -21,4 +23,16 @@ export const createProject = async ({ name, userId }) => {
   }
 
   return project;
+};
+
+export const getAllProjectByUserId = async ({ userId }) => {
+  if (!userId) {
+    throw new Error("UserId is required");
+  }
+
+  const allUserProjects = await projectModel.find({
+    users: userId,
+  });
+
+  return allUserProjects;
 };
