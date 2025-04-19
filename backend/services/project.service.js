@@ -47,14 +47,14 @@ export const addUsersToProject = async ({ projectId, users, userId }) => {
   }
 
   if (!users) {
-    throw new Error("users is required");
+    throw new Error("users are required");
   }
 
   if (
     !Array.isArray(users) ||
-    users.some((userId) => !mongoose.Types.ObjectId.isValid())
+    users.some((userId) => !mongoose.Types.ObjectId.isValid(userId))
   ) {
-    throw new Error("Invalid userId");
+    throw new Error("Invalid userId(s) in users array");
   }
 
   if (!userId) {
@@ -91,4 +91,22 @@ export const addUsersToProject = async ({ projectId, users, userId }) => {
   );
 
   return updatedProject;
+};
+
+export const getProjectById = async ({ projectId }) => {
+  if (!projectId) {
+    throw new Error("ProjectId is required");
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(projectId)) {
+    throw new Error("Invalid projectId");
+  }
+
+  const project = await projectModel
+    .findOne({
+      _id: projectId,
+    })
+    .populate("users", "email");
+
+  return project;
 };
