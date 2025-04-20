@@ -1,7 +1,7 @@
 import projectModel from "../models/project.model.js";
 import * as projectService from "../services/project.service.js";
 import userModel from "../models/user.model.js";
-import { check, validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 
 export const createProject = async (req, res) => {
   const errors = validationResult(req);
@@ -76,7 +76,7 @@ export const getProjectById = async (req, res) => {
   const { projectId } = req.params;
 
   try {
-    const porject = await projectService.getProjectById({ projectId });
+    const project = await projectService.getProjectById({ projectId });
 
     return res.status(200).json({
       project,
@@ -86,3 +86,4 @@ export const getProjectById = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
+  
