@@ -1,7 +1,7 @@
 Database Soen => https://github.com/Ankur77720/soen/tree/main
 https://www.youtube.com/watch?v=v9MtwYmSXuw&list=PLbtI3_MArDOmebicV5NFkhBMRJH8vhBEN&index=8
 sudo mongod --config /etc/mongod.conf
-
+for icon = https://remixicon.com/
 
 start 
       frontend 
@@ -44,4 +44,11 @@ Ok to proceed? (y) y
 
 
 
-Last ==>  3:00:00
+
+#0D2B1D 
+#345635 
+#6B8F71 
+#AEC3B0 
+#E3EFD3
+
+Last ==>  3:21:00 
