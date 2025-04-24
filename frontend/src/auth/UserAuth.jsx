@@ -1,41 +1,63 @@
-import React, {useContext, useEffect, useState} from 'react'
-import { UserContext } from '../context/user.context'
-import { Navigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/user.context";
 
+const UserAuth = ({ children }) => {
+  const { user } = useContext(UserContext);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
-const UserAuth = ({children}) => {
-
-    const { user } = useContext(UserContext);
-    const [loading, setLoading] = useState(true)
-    const token = localStorage.getItem('token')
-
+  useEffect(() => {
     if (user) {
-        setLoading(false)
+      setLoading(false);
     }
 
-
-    if(loading) {
-        return <div>Loading...</div>
+    if (!token) {
+      navigate("/login");
     }
 
-    useEffect(() => {
-      
-        if(!token){
-            Navigate('/login')
-        }
+    if (!user) {
+      navigate("/login");
+    }
+  }, []);
 
-        if(!user) {
-            Navigate('/login')
-        }
-    
-    }, [])
-    
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  return (
-    <>
-        {children}
-    </>
-  )
-}
+  return <>{children}</>;
+};
 
-export default UserAuth
+export default UserAuth;
+
+// import React, { useContext, useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { UserContext } from "../context/user.context";
+
+// const UserAuth = ({ children }) => {
+//   const { user } = useContext(UserContext);
+//   const [loading, setLoading] = useState(true);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const token = localStorage.getItem("token");
+//     if (user) {
+//       setLoading(false);
+//     }
+
+//     if (!token || !user) {
+//       navigate("/login");
+//     } else {
+//       setLoading(false);
+//     }
+//   }, [user, navigate]);
+
+//   if (loading) {
+//     return <div>Loading...</div>;
+//   }
+
+//   return <>{children}</>;
+// };
+
+// export default UserAuth;

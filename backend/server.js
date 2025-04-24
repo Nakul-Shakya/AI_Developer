@@ -1,4 +1,4 @@
-import "dotenv/config.js"; // Automatically loads environment variables
+import "dotenv/config.js";
 import http from "http";
 import app from "./app.js";
 import { Server } from "socket.io";
@@ -20,14 +20,13 @@ io.use(async (socket, next) => {
     const token =
       socket.handshake.auth?.token ||
       socket.handshake.headers.authorization?.split(" ")[1];
-
     const projectId = socket.handshake.query.projectId;
 
     if (!mongoose.Types.ObjectId.isValid(projectId)) {
-      return next(new Error("Invalid project ID"));
+      return next(new Error("Invalid projectId"));
     }
 
-    socket.projectId = await projectModel.findById(projectId);
+    socket.project = await projectModel.findById(projectId);
 
     if (!token) {
       return next(new Error("Authentication error"));
@@ -40,6 +39,7 @@ io.use(async (socket, next) => {
     }
 
     socket.user = decoded;
+
     next();
   } catch (error) {
     next(error);
@@ -47,16 +47,16 @@ io.use(async (socket, next) => {
 });
 
 io.on("connection", (socket) => {
+  socket.roomId = socket.project._id.toString();
+
   console.log("a user connected");
 
-  socket.join(socket.projectId._id);
+  socket.join(socket.roomId);
 
-  socket.on("poject-message", (data) => {
-
+  socket.on("project-message", async (data) => {
     console.log(data);
-    
 
-    socket.broadcast.to(socket.project._id).emit("project-message", data);
+    socket.broadcast.to(socket.roomId).emit("project-message", data);
   });
 
   socket.on("event", (data) => {

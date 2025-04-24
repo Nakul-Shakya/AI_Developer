@@ -2,12 +2,11 @@ import React, { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom"; //, useNavigate
 import axios from "../config/axios";
 import {
-    initializeSocket,
-    receivieMessage,
-    sendMessage,
+  initializeSocket,
+  receiveMessage,
+  sendMessage,
 } from "../config/socket";
 import { UserContext } from "../context/user.context";
-
 
 const Project = () => {
   const location = useLocation();
@@ -18,6 +17,7 @@ const Project = () => {
   const [project, setProject] = useState(location.state.project);
   const [message, setMessage] = useState("");
   const { user } = useContext(UserContext);
+  const messageBox = React.createRef();
 
   const [users, setUsers] = useState([]);
 
@@ -52,17 +52,21 @@ const Project = () => {
   const send = () => {
     sendMessage("project-message", {
       message,
-      sender: user._id,
+      sender: user,
     });
 
-    setMessage();
-  }
+    appendOutgoingMessage(message);
+
+    setMessage("");
+  };
 
   useEffect(() => {
     initializeSocket(project._id);
 
-    receivieMessage("project-message", (data) => {
+    receiveMessage("project-message", (data) => {
       console.log(data);
+
+      appendIncomingMessage(data);
     });
 
     axios
@@ -85,10 +89,60 @@ const Project = () => {
       });
   }, []);
 
+  function appendIncomingMessage(messageObject) {
+    const messageBox = document.querySelector(".message-box");
+
+    const message = document.createElement("div");
+    message.classList.add(
+      "message",
+      "max-w-56",
+      "flex",
+      "flex-col",
+      "p-2",
+      "bg-white"
+    );
+    message.innerHTML = `  
+      <small className="opacity-100 text-xs">${messageObject.sender.email}</small>
+              <p className="text-sm">
+               ${messageObject.message}
+              </p>
+    `;
+    messageBox.appendChild(message);
+    scrollToBottom()
+  }
+
+  function appendOutgoingMessage(message) {
+    const messageBox = document.querySelector(".message-box");
+
+    const newMessage = document.createElement("div");
+    newMessage.classList.add(
+      // "message",
+      "ml-auto",
+      "max-w-56",
+      "flex",
+      "flex-col",
+      "p-2",
+      "bg-white"
+    );
+    newMessage.innerHTML = `  
+      <small className="opacity-100 text-xs">${user.email}</small>
+              <p className="text-sm">
+               ${message}
+              </p>
+    `;
+    messageBox.appendChild(newMessage);
+    scrollToBottom()
+  }
+
+
+  function scrollToBottom() {
+    messageBox.current.scrollTop = messageBox.current.scrollHeight
+}
+
   return (
     <main className="h-screen w-screen flex">
-      <section className="left relative flex flex-col h-full min-w-96 bg-[#6B8F71]">
-        <header className="flex justify-between items-center p-2 px-2 w-full bg-[#0D2B1D]">
+      <section className="left relative flex flex-col h-screen min-w-96 bg-[#6B8F71]">
+        <header className="flex justify-between items-center p-2 px-2 w-full bg-[#0D2B1D] absolute top-0">
           <button
             className="flex gap-2 text-white"
             onClick={() => setIsModalOpen(true)}
@@ -106,22 +160,13 @@ const Project = () => {
           </button>
         </header>
 
-        <div className="conversation-area flex-grow flex flex-col">
-          <div className="message-box flex-grow flex flex-col gap-1 p-1">
-            <div className="massage max-w-56 flex flex-col p-2 bg-[#E3EFD3] w-fit rounded-md">
-              <small className="opacity-100 text-xs">exanpal@gmail.com</small>
-              <p className="text-sm">
-                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
-              </p>
-            </div>
+        <div className="conversation-area pt-14 pb-10 flex-grow flex flex-col h-full relative">
+          <div
+            ref={messageBox}
+            className="message-box flex-grow flex flex-col gap-1 p-1 overflow-auto max-h-full scroll-smooth"
+          ></div>
 
-            <div className="ml-auto massage max-w-56 flex flex-col p-2 bg-[#E3EFD3] w-fit rounded-md">
-              <small className="opacity-100 text-xs">exanpal@gmail.com</small>
-              <p className="text-sm">Lorem ipsum dolor sit amet.</p>
-            </div>
-          </div>
-
-          <div className="inputFliet w-full flex bg-[#E3EFD3]">
+          <div className="inputFliet w-full flex absolute bottom-0 bg-[#E3EFD3]">
             <input
               value={message}
               onChange={(e) => setMessage(e.target.value)}

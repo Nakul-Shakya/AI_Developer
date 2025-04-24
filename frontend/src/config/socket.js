@@ -17,10 +17,10 @@ export const initializeSocket = (projectId) => {
   return socketInstance;
 };
 
-export const receivieMessage = (eventName, cb) => {
+export const receiveMessage = (eventName, cb) => {
   socketInstance.on(eventName, cb);
 };
 
-export const sendMessage = (evntName, data) => {
-  socketInstance.emit(evntName, data);
+export const sendMessage = (eventName, data) => {
+  socketInstance.emit(eventName, data);
 };
