@@ -52,3 +52,16 @@ Ok to proceed? (y) y
 #E3EFD3
 
 Last ==>  5:05:00 
+
+write an js function which tells that a number is prime or not, 
+if an number is not prime then return the factors of that number
+
+
+
+
+
+
+
+
+
+
