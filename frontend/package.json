@@ -13,6 +13,7 @@
     "@tailwindcss/vite": "^4.0.17",
     "axios": "^1.8.4",
     "cors": "^2.8.5",
+    "highlight.js": "^11.11.1",
     "markdown-to-jsx": "^7.7.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

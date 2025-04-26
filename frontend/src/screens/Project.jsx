@@ -8,7 +8,7 @@ import {
   sendMessage,
 } from "../config/socket";
 import Markdown from "markdown-to-jsx";
-// import hljs from 'highlight.js';
+import hljs from "highlight.js";
 
 function SyntaxHighlightedCode(props) {
   const ref = useRef(null);
@@ -38,6 +38,10 @@ const Project = () => {
 
   const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [fileTree, setFileTree] = useState({});
+
+  const [currentFile, setCurrentFile] = useState(null);
+  const [openFiles, setOpenFiles] = useState([]);
 
   const handleUserClick = (id) => {
     setSelectedUserId((prevSelectedUserId) => {
@@ -99,6 +103,14 @@ const Project = () => {
     initializeSocket(project._id);
 
     receiveMessage("project-message", (data) => {
+      console.log(JSON.parse(data.message));
+
+      const message = JSON.parse(data.message);
+
+      if (message.fileTree) {
+        setFileTree(message.fileTree);
+      }
+
       setMessages((prevMessages) => [...prevMessages, data]);
     });
 
@@ -121,6 +133,17 @@ const Project = () => {
         console.log(err);
       });
   }, []);
+
+  //   function saveFileTree(ft) {
+  //     axios.put('/projects/update-file-tree', {
+  //         projectId: project._id,
+  //         fileTree: ft
+  //     }).then(res => {
+  //         console.log(res.data)
+  //     }).catch(err => {
+  //         console.log(err)
+  //     })
+  // }
 
   // function scrollToBottom() {
   //   messageBox.current.scrollTop = messageBox.current.scrollHeight;
@@ -162,6 +185,7 @@ const Project = () => {
                 }  message flex flex-col p-2 bg-slate-50 w-fit rounded-md`}
               >
                 <small className="opacity-65 text-xs">{msg.sender.email}</small>
+
                 <div className="text-sm">
                   {msg.sender._id === "ai" ? (
                     WriteAiMessage(msg.message)
@@ -206,9 +230,12 @@ const Project = () => {
           </header>
           <div className="users flex flex-col gap-2">
             {project.users &&
-              project.users.map((user) => {
+              project.users.map((user, index) => {
                 return (
-                  <div className="user cursor-pointer hover:bg-slate-200 p-2 flex gap-2 items-center">
+                  <div
+                    key={index}
+                    className="user cursor-pointer hover:bg-slate-200 p-2 flex gap-2 items-center"
+                  >
                     <div className="aspect-square rounded-full w-fit h-fit flex items-center justify-center p-5 text-white bg-slate-600">
                       <i className="ri-user-fill absolute"></i>
                     </div>
@@ -218,6 +245,78 @@ const Project = () => {
               })}
           </div>
         </div>
+      </section>
+
+      <section className="right bg-red-50 flex-grow h-full flex">
+        <div className="explorer h-full max-w-64 min-w-52 bg-slate-200">
+          <div className="file-tree w-full">
+            {Object.keys(fileTree).map((file, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  setCurrentFile(file);
+                  setOpenFiles([...new Set([...openFiles, file])]);
+                }}
+                className="tree-element cursor-pointer p-2 px-4 flex items-center gap-2 bg-slate-300 w-full"
+              >
+                <p className="font-semibold text-lg">{file}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {currentFile && (
+          <div className="code-editor flex flex-col flex-grow h-full">
+            <div className="top flex">
+              {openFiles.map((file, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentFile(file)}
+                  className={`open-file cursor-pointer p-2 px-4 flex items-center w-fit gap-2 bg-slate-300 ${
+                    currentFile === file ? "bg-slate-400" : ""
+                  }`}
+                >
+                  <p className="font-semibold text-lg">{file}</p>
+                </button>
+              ))}
+            </div>
+
+            <div className="bottom flex flex-grow max-w-full shrink overflow-auto"></div>
+
+            {fileTree[currentFile] && (
+              <div className="code-editor-area h-full overflow-auto flex-grow bg-slate-50">
+                <pre className="hljs h-full">
+                  <code
+                    className="hljs h-full outline-none"
+                    contentEditable
+                    suppressContentEditableWarning
+                    onBlur={(e) => {
+                      const updatedContent = e.target.innerText;
+                      setFileTree((prevFileTree) => ({
+                        ...prevFileTree,
+                        [currentFile]: {
+                          ...prevFileTree[currentFile],
+                          contents: updatedContent,
+                        },
+                      }));
+                    }}
+                    dangerouslySetInnerHTML={{
+                      __html: hljs.highlight(
+                        "javascript",
+                        fileTree[currentFile].file.contents
+                      ).value,
+                    }}
+                    style={{
+                      whiteSpace: "pre-wrap",
+                      paddingBottom: "25rem",
+                      counterSet: "line-numbering",
+                    }}
+                  />
+                </pre>
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       {/* Modal */}
