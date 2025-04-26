@@ -85,19 +85,34 @@ const Project = () => {
   function WriteAiMessage(message) {
     const messageObject = JSON.parse(message);
 
-    return (
-      <div className="overflow-auto bg-slate-950 text-white rounded-sm p-2">
-        <Markdown
-          children={messageObject.text}
-          options={{
-            overrides: {
-              code: SyntaxHighlightedCode,
-            },
-          }}
-        />
-      </div>
-    );
-  }
+  //   return (
+  //     <div className="overflow-auto bg-slate-950 text-white rounded-sm p-2">
+  //       <Markdown
+  //         children={messageObject.text}
+  //         options={{
+  //           overrides: {
+  //             code: SyntaxHighlightedCode,
+  //           },
+  //         }}
+  //       />
+  //     </div>
+  //   );
+  // }
+
+  return (
+    <div className="overflow-auto bg-slate-950 text-white rounded-sm p-2">
+      <Markdown
+        options={{
+          overrides: {
+            code: SyntaxHighlightedCode,
+          },
+        }}
+      >
+        {messageObject.text}
+      </Markdown>
+    </div>
+  );
+}
 
   useEffect(() => {
     initializeSocket(project._id);
