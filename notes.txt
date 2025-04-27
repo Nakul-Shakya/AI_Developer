@@ -63,6 +63,8 @@ in the UI adn use an array that is stateVariable and map for rendering new messa
 
 @ai create an JavaScript function sum
 @ai create an express server with es6 features like import
+@ai create an express server
+@ai create an express server with es6 features like import,just create two files app.js and package.json
 
 
 create an express server with es6 features like import and exprot
@@ -70,4 +72,4 @@ create an express server with es6 features like import and exprot
 
 
 
-Last ==>  7:05:00   
+Last ==> 100% done  
