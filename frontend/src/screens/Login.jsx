@@ -8,7 +8,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const { setUser } = useContext(UserContext);
-
   const navigate = useNavigate();
 
   function submitHandler(e) {
@@ -20,58 +19,62 @@ const Login = () => {
         password,
       })
       .then((res) => {
-        console.log(res.data);
-
         localStorage.setItem("token", res.data.token);
         setUser(res.data.user);
-
         navigate("/");
       })
       .catch((err) => {
-        console.log(err.response.data);
+        console.log(err.response?.data || err.message);
       });
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-white mb-6">Login</h2>
-        <form onSubmit={submitHandler}>
-          <div className="mb-4">
-            <label className="block text-gray-400 mb-2" htmlFor="email">
-              Email
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black px-4">
+      <div className="bg-gray-900/80 backdrop-blur-md p-10 rounded-xl shadow-2xl w-full max-w-md text-white">
+        <h2 className="text-3xl font-bold mb-6 text-center">Welcome Back</h2>
+        <form onSubmit={submitHandler} className="space-y-5">
+          <div>
+            <label htmlFor="email" className="block mb-1 text-sm text-gray-300">
+              Email Address
             </label>
             <input
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
               id="email"
-              className="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="you@example.com"
+              required
             />
           </div>
-          <div className="mb-6">
-            <label className="block text-gray-400 mb-2" htmlFor="password">
+          <div>
+            <label
+              htmlFor="password"
+              className="block mb-1 text-sm text-gray-300"
+            >
               Password
             </label>
             <input
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
               id="password"
-              className="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="••••••••"
+              required
             />
           </div>
           <button
             type="submit"
-            className="w-full p-3 rounded bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full bg-blue-600 hover:bg-blue-700 transition-all duration-200 p-3 rounded-lg font-semibold text-white"
           >
             Login
           </button>
         </form>
-        <p className="text-gray-400 mt-4">
+        <p className="text-sm text-gray-400 mt-6 text-center">
           Don't have an account?{" "}
-          <Link to="/register" className="text-blue-500 hover:underline">
-            Create one
+          <Link to="/register" className="text-blue-400 hover:underline">
+            Sign up here
           </Link>
         </p>
       </div>

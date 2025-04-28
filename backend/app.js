@@ -26,7 +26,7 @@ app.use("/ai", aiRoute);
 
 // Default route
 app.get("/", (req, res) => {
-  res.send("Hello, world!");
+  res.send("Hello world!");
 });
 
 // Start server

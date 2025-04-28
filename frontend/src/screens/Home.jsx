@@ -4,28 +4,32 @@ import axios from "../config/axios";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [projectName, setProjectName] = useState(null);
+  const [projectName, setProjectName] = useState("");
   const [project, setProject] = useState([]);
 
   const navigate = useNavigate();
 
   function createProject(e) {
     e.preventDefault();
-    console.log({ projectName });
 
     axios
-      .post("/projects/create", {
-        name: projectName,
-      })
+      .post("/projects/create", { name: projectName })
       .then((res) => {
-        console.log(res);
         setIsModalOpen(false);
+        setProject([...project, res.data.project]);
+        setProjectName("");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
+  }
+
+  function logoutHandler() {
+    localStorage.removeItem("token");
+    setUser(null);
+    navigate("/login");
   }
 
   useEffect(() => {
@@ -35,76 +39,82 @@ const Home = () => {
         setProject(res.data.projects);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   }, []);
 
   return (
-    <main className="p-4">
-      <div className="projects flex flex-wrap gap-3">
+    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white px-4 py-6">
+      {/* Header */}
+      <header className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold">Your Projects</h1>
+        <button
+          onClick={logoutHandler}
+          className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md text-white font-medium transition-all"
+        >
+          Logout
+        </button>
+      </header>
+
+      {/* Project Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {/* New Project Card */}
         <button
           onClick={() => setIsModalOpen(true)}
-          className="project p-4 border border-slate-300 rounded-md"
+          className="border-2 border-dashed border-gray-500 rounded-lg p-6 flex items-center justify-center hover:bg-gray-800 transition-all"
         >
-          New Project
-          <i className="ri-link ml-2"></i>
+          <span className="text-lg font-medium">+ New Project</span>
         </button>
 
+        {/* Existing Projects */}
         {project.map((project) => (
           <div
             key={project._id}
-            onClick={() => {
+            onClick={() =>
               navigate(`/project`, {
                 state: { project },
-              });
-            }}
-            className="project flex flex-col gap-2 cursor-pointer p-4 border border-slate-300 rounded-md min-w-52 hover:bg-slate-200"
+              })
+            }
+            className="bg-gray-800 p-5 rounded-lg shadow-md cursor-pointer hover:bg-gray-700 transition-all"
           >
-            <h2 className="font-semibold">{project.name}</h2>
-
-            <div className="flex gap-2">
-              <p>
-                {" "}
-                <small>
-                  {" "}
-                  <i className="ri-user-line"></i> Collaborators
-                </small>{" "}
-                :
-              </p>
+            <h2 className="text-xl font-semibold mb-2">{project.name}</h2>
+            <p className="text-sm text-gray-300 flex items-center gap-1">
+              <i className="ri-user-line"></i> Collaborators:{" "}
               {project.users.length}
-            </div>
+            </p>
           </div>
         ))}
       </div>
 
+      {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-md shadow-md w-1/3">
-            <h2 className="text-xl mb-4">Create New Project</h2>
-            <form onSubmit={createProject}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white text-black p-8 rounded-xl shadow-lg w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-4">Create New Project</h2>
+            <form onSubmit={createProject} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">
                   Project Name
                 </label>
                 <input
-                  onChange={(e) => setProjectName(e.target.value)}
-                  value={projectName}
                   type="text"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
-              <div className="flex justify-end">
+              <div className="flex justify-end gap-3">
                 <button
                   type="button"
-                  className="mr-2 px-4 py-2 bg-gray-300 rounded-md"
                   onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                 >
                   Create
                 </button>

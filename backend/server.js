@@ -60,8 +60,7 @@ io.on('connection', socket => {
     socket.roomId = socket.project._id.toString()
 
 
-    console.log('a user connected');
-
+    console.log('A User Connected');
 
 
     socket.join(socket.roomId);
@@ -101,8 +100,6 @@ io.on('connection', socket => {
         socket.leave(socket.roomId)
     });
 });
-
-
 
 
 server.listen(port, () => {
