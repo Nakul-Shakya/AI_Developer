@@ -88,36 +88,38 @@ Here’s the corrected and professional version:
 
 ### Clone the Repository
 
-`bash
+```bash
 git clone https://github.com/Nakul-Shakya/AI_Developer.git
 cd AI_Developer
+```
 
-Setup Backend
+### Setup Backend
 
+```bash
 cd backend
 npm install
 npm start
+```
 
-Setup Frontend
+### Setup Frontend
 
 Open a new terminal window:
 
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
-Environment Setup
+## Environment Setup
 
-Inside both frontend/ and backend/ folders, you will find a .env_Null file.
+Inside both `frontend/` and `backend/` folders, you will find a `.env_Null` file.  
 Follow these steps:
 
-1. Rename .env_Null to .env.
+1. **Rename** `.env_Null` to `.env`.
+2. **Fill** the `.env` file with the required environment variables, as shown below:
 
-
-2. Fill the .env file with the required environment variables, as shown below:
-
-
-
+```plaintext
 PORT=80XX
 MONGODB_URI=mongodb://X.X.X.X/projectName
 JWT_SECRET=JWT_SECRET
@@ -125,49 +127,39 @@ REDIS_HOST=redis-17wr1.crce1wr2.ap-south-1-8.ec2.redns.redis-cloud.com
 REDIS_PORT=17XXX
 REDIS_PASSWORD=Pzcdcz6IWSibk;f83waLjyyLQWKXq00y
 GOOGLE_AI_KEY=AIzfsdjklBUcgs9SPK4akjsdkny9PsInG_GdJ7QfQ
+```
 
-> Note:
-The project will not run unless the .env files are properly renamed and configured.
+> **Note:**  
+> The project will not run unless the `.env` files are properly renamed and configured.
 
+## API Endpoints (Examples)
 
+- `POST /api/auth/register` – Register a new user
+- `POST /api/auth/login` – Login an existing user
+- `GET /api/ai/generate` – Generate AI response
 
-API Endpoints (Examples)
+## Start Commands Summary
 
-POST /api/auth/register – Register a new user
+- **Backend:**
+  ```bash
+  npm start
+  ```
 
-POST /api/auth/login – Login an existing user
+- **Frontend:**
+  ```bash
+  npm run dev
+  ```
 
-GET /api/ai/generate – Generate AI response
+## License
 
+This project is open-source and available under the [MIT License](LICENSE).
 
-Start Commands Summary
+## Acknowledgements
 
-Backend:
-
-npm start
-
-Frontend:
-
-npm run dev
-
-
-License
-
-This project is open-source and available under the MIT License.
-
-Acknowledgements
-
-MongoDB Atlas
-
-Redis Cloud
-
-Google AI API
-
-Open Source Libraries
-
-
----
-
+- MongoDB Atlas
+- Redis Cloud
+- Google AI API
+- Open Source Libraries
 ### Key Improvements:
 - Proper headings (`##`, `###`) ka use kiya gaya hai.
 - Code blocks (`bash`) ke andar commands format kiya gaya hai.
@@ -185,3 +177,4 @@ Open Source Libraries
 - API examples basic diye hain (detail API docs banana chaaho to alag se section bana sakte hain).
 
 ---
+
